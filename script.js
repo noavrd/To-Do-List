@@ -3,7 +3,9 @@ let input = document.getElementById("text-input");
 let select = document.getElementById("priority-selector");
 let button = document.getElementById("add-button");
 let counter = document.getElementById("counter");
-counter = Number(counter);
+let countTask = 0;
+let sort = document.getElementById("sort-button");
+
 
 //enter a task to the list
 button.onclick = () => {
@@ -34,6 +36,12 @@ button.onclick = () => {
     input.focus();
     listText.appendChild(inputValue);
 
-    
-    counter++;
+    //add count
+    countTask++;
+    counter.textContent = countTask;
+
+}
+
+button.onclick = () => {
+
 }
