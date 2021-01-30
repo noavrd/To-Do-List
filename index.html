@@ -9,7 +9,8 @@
 <body>
     <section id="control-section">
         <h1>ToDo List</h1>
-        <span id="counter">0</span>
+        <span>Total tasks:</span>
+        <span id="counter">0</span></br>
         <input id="text-input"; type="text"; placeholder="Enter a task"; required>
         <select id="priority-selector"; required>
             <option value="1">1</option>
@@ -18,11 +19,15 @@
             <option value="4">4</option>
             <option value="5">5</option>
         </select>
-        <button id="add-button"; type="button"; value="Add">Add</button>
+        <button id="add-button"; type="button"; value="Add">Add</button></br>
         <button id="sort-button"; type="button"; value="sort">sort</button>
+        <button id="delete-all"; type="button"; value="delete">Delete all</button>
     </section>
     <section id="view-section">
-
+        <h2>To Do</h2>
+    </section>
+    <section id="comleted tasks">
+        <h2>completed</h2>
     </section>
     <script src="./script.js"></script>
 </body>
