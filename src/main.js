@@ -5,7 +5,6 @@ let button = document.getElementById("add-button");
 let counter = document.getElementById("counter");
 let countTask = 0;
 let sort = document.getElementById("sort-button");
-let option = document.getElementsByTagName("option");
 let deleteAll = document.getElementById("Delete-all");
 let listText = document.createElement("div");
 let obj = {};
@@ -55,14 +54,14 @@ sort.onclick = () =>{ //a function that will check the priority in each object a
     let newArr = [priority1, priority2, priority3, priority4, priority5];
     for (let x= 0; x < newArr.length; x++){
         let enterBySort = newArr[x];
-        for (let j = 0; j < priority1.length; j++) {
+        for (let j = 0; j <= priority1.length; j++) {
             if (enterBySort[j] !== undefined) {
                 arr.push(enterBySort[j]);
             }
         }
     }
     viewSection.innerHTML = ""; //delete the current list
-    for(let i =0; i < arr.length; i++) { //add the new list by sort
+    for(let i = 0; i < arr.length; i++) { //add the new list by sort
         listText = document.createElement("div");
         listText.className = "todo-container";
         viewSection.append(listText);
@@ -86,11 +85,7 @@ sort.onclick = () =>{ //a function that will check the priority in each object a
     
 } 
 
-deleteAll.onclick = () => {
-    arr = [];
-    viewSection.innerHTML = ""; //delete the current list
 
-}
 localStorage.setItem("view-section", "arr");
 
 function addSelect(listText) {
@@ -110,16 +105,13 @@ function deleteTask(listText) {
         countTask--;
         counter.textContent = countTask;
         let count = arr.length;
-        for (let i = 0; i < count; i++){
-            if (listText.dateTime.innerText !== arr[i].dateTime) {
-                arrayNew.push(arr.shift()) 
+        for (let i = 0; i < count; i++) { //delete the ToDo from the main array (arr)
+            if (listText.querySelector(".todo-created-at").innerText === arr[i]["dateTime"]) {
+                arr.splice(i, 1);
+                console.log(arr);
             }
-            arr =[];   
         }
-        while (arrayNew !== []) {
-            arr.push(arrayNew.shift());
-        }
-};
+    };
     return listText.append(deleteButton), false;
 }
 
