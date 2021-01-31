@@ -5,7 +5,7 @@ let button = document.getElementById("add-button");
 let counter = document.getElementById("counter");
 let countTask = 0;
 let sort = document.getElementById("sort-button");
-let deleteAll = document.getElementById("Delete-all");
+let deleteAll = document.getElementById("delete-all");
 let listText = document.createElement("div");
 let obj = {};
 let arr = [];
@@ -29,7 +29,7 @@ button.onclick = () => {
     countIncrease();
 }
 let task;
-sort.onclick = () =>{ //a function that will check the priority in each object and than if the priority = to the option(1-5) it will enter to a new array, than takes the new array and put it in the original array after sort
+sort.onclick = () => { //a function that will check the priority in each object and than if the priority = to the option(1-5) it will enter to a new array, than takes the new array and put it in the original array after sort
     let priority1 = [];
     let priority2 = [];
     let priority3 = [];
@@ -83,8 +83,12 @@ sort.onclick = () =>{ //a function that will check the priority in each object a
         listText.append(timeValue);
     }
     
-} 
+}
 
+deleteAll.onclick= () => {
+    arr = [];
+    viewSection.innerHTML = "";
+}
 
 localStorage.setItem("view-section", "arr");
 
@@ -108,7 +112,6 @@ function deleteTask(listText) {
         for (let i = 0; i < count; i++) { //delete the ToDo from the main array (arr)
             if (listText.querySelector(".todo-created-at").innerText === arr[i]["dateTime"]) {
                 arr.splice(i, 1);
-                console.log(arr);
             }
         }
     };
