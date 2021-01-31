@@ -6,11 +6,10 @@ let counter = document.getElementById("counter");
 let countTask = 0;
 let sort = document.getElementById("sort-button");
 let option = document.getElementsByTagName("option");
-let deleteAll = document.getElementById("Delete all");
+let deleteAll = document.getElementById("Delete-all");
 let listText = document.createElement("div");
 let obj = {};
 let arr = [];
-
 
 button.onclick = () => {
     if (input.value === "") { //check that the input is not empty
@@ -19,44 +18,88 @@ button.onclick = () => {
     }
     listText = document.createElement("div");
     listText.className = "todo-container";
-    viewSection.appendChild(listText);
+    viewSection.append(listText);
+    addSelect(listText);
     obj = {
-        select: addSelect(listText),
-        delete: deleteTask(listText),
-        priority: addPriority(listText),
-        value: addValue(listText),
-        dateTime: addDate(listText)
+        "deleteToDo" : deleteTask(listText),
+        "priority": addPriority(listText),
+        "value": addValue(listText),
+        "dateTime": addDate(listText)
     };
-    arr.push(obj);
+    arr.push(obj); //set all the objects in one array
     countIncrease();
 }
-let newArr = [];
-sort.onclick = () =>{
-    for (let i = 0; i < arr.length; i++){
-        for(let j = 1; j <= option.length; j++) {
-            if (arr[i].priority === j) {
-                newArr.push(arr[i]);
+let task;
+sort.onclick = () =>{ //a function that will check the priority in each object and than if the priority = to the option(1-5) it will enter to a new array, than takes the new array and put it in the original array after sort
+    let priority1 = [];
+    let priority2 = [];
+    let priority3 = [];
+    let priority4 = [];
+    let priority5 = [];
+    
+    for (let i = 0; i < arr.length; i++) {
+         task = arr[i].priority;
+         if(task === "1") {
+             priority1.push(arr[i]);
+        } else if (task === "2") {
+             priority2.push(arr[i]);
+        } else if (task === "3") {
+            priority3.push(arr[i]);
+        } else if (task === "4") {
+            priority4.push(arr[i]);
+        } else {
+            priority5.push(arr[i]);
+        }
+    }
+    arr = [];
+    let newArr = [priority1, priority2, priority3, priority4, priority5];
+    for (let x= 0; x < newArr.length; x++){
+        let enterBySort = newArr[x];
+        for (let j = 0; j < priority1.length; j++) {
+            if (enterBySort[j] !== undefined) {
+                arr.push(enterBySort[j]);
             }
         }
     }
-console.log(newArr);
-    for (let n = 0; n < newArr.length; n++) {
-        arr.push(newArr.unshift());
+    viewSection.innerHTML = ""; //delete the current list
+    for(let i =0; i < arr.length; i++) { //add the new list by sort
+        listText = document.createElement("div");
+        listText.className = "todo-container";
+        viewSection.append(listText);
+        addSelect(listText);
+        deleteTask(listText);
+        let selectValue = document.createElement("div");
+        selectValue.textContent = arr[i].priority;
+        selectValue.className = "todo-priority";
+        listText.append(selectValue);
+
+        let inputValue = document.createElement("div");
+        inputValue.textContent = arr[i].value;
+        inputValue.className = "todo-text";
+        listText.append(inputValue);
+
+        let timeValue = document.createElement("div");
+        timeValue.textContent = arr[i].dateTime;
+        timeValue.className = "todo-created-at";
+        listText.append(timeValue);
     }
+    
+} 
+
+deleteAll.onclick = () => {
+    arr = [];
+    viewSection.innerHTML = ""; //delete the current list
+
 }
-
-
+localStorage.setItem("view-section", "arr");
 
 function addSelect(listText) {
     let checkBox = document.createElement("input");
     checkBox.type = "checkBox";
     checkBox.className = "check";
-    return listText.appendChild(checkBox);
-
+    return listText.append(checkBox);
 }
-
-
-
+let arrayNew = [];
 //delete task
 function deleteTask(listText) {
     let deleteButton = document.createElement("button");
@@ -66,9 +109,18 @@ function deleteTask(listText) {
         viewSection.removeChild(listText);
         countTask--;
         counter.textContent = countTask;
-    };
-    return listText.appendChild(deleteButton);;
-
+        let count = arr.length;
+        for (let i = 0; i < count; i++){
+            if (listText.dateTime.innerText !== arr[i].dateTime) {
+                arrayNew.push(arr.shift()) 
+            }
+            arr =[];   
+        }
+        while (arrayNew !== []) {
+            arr.push(arrayNew.shift());
+        }
+};
+    return listText.append(deleteButton), false;
 }
 
 //add priority
@@ -77,9 +129,8 @@ function addPriority(listText) {
     selectValue.textContent = select.value;
     selectValue.className = "todo-priority";
     select.value = 1;
-  return listText.appendChild(selectValue);
-    
-
+    listText.append(selectValue);
+    return selectValue.innerText;
 }
 
 //add value
@@ -89,9 +140,8 @@ function addValue(listText) {
     inputValue.className = "todo-text";
     input.value = "";
     input.focus();
-    return listText.appendChild(inputValue);
-
-
+    listText.append(inputValue);
+    return inputValue.innerText;
 }
 
 //add date
@@ -101,11 +151,8 @@ function addDate(listText) {
     time = time.toISOString().split('T')[0] + " " + time.toTimeString().split(" ")[0];
     timeValue.textContent = time;
     timeValue.className = "todo-created-at";
- return listText.appendChild(timeValue);
-    
-    
-
-
+    listText.append(timeValue);
+    return timeValue.innerText;
 }
 
 //add count
