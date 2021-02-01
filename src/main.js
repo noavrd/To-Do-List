@@ -10,7 +10,45 @@ let listText = document.createElement("div");
 let obj = {};
 let arr = [];
 
+document.addEventListener("DOMContentLoaded", putOnScreenLocalStorage);
+function putOnScreenLocalStorage() {
+    if (localStorage.getItem("arr") === null) {
+        arr = [];
+    } else {
+        arr = JSON.parse(localStorage.getItem("arr"));
+    }
+    for (let i = 0; i < arr.length; i++) {
+        listText = document.createElement("div");
+        listText.className = "todo-container";
+        viewSection.append(listText);
+        addSelect(listText);
+        deleteTask(listText);
+        let selectValue = document.createElement("div");
+        selectValue.innerText = arr[i]["priority"];
+        selectValue.className = "todo-priority";
+        listText.append(selectValue);
+        let inputValue = document.createElement("div");
+        inputValue.innerText = arr[i]["value"];
+        inputValue.className = "todo-text";
+        listText.append(inputValue);
+        inputValue.innerText;
+        let timeValue = document.createElement("div");
+        timeValue.className = "todo-created-at";
+        timeValue.innerText =arr[i]["dateTime"];
+        listText.append(timeValue);
+        countTask++;
+    }
+    counter.textContent = countTask;
+
+}
+
+
 button.onclick = () => {
+    if (localStorage.getItem("arr") === null) {
+        arr = [];
+    } else {
+        arr = JSON.parse(localStorage.getItem("arr"));
+    }
     if (input.value === "") { //check that the input is not empty
         alert("Add a task");
         return;
@@ -19,17 +57,22 @@ button.onclick = () => {
     listText.className = "todo-container";
     viewSection.append(listText);
     addSelect(listText);
-    obj = {
-        "deleteToDo" : deleteTask(listText),
+    deleteTask(listText);
+    arr.push( {
         "priority": addPriority(listText),
         "value": addValue(listText),
         "dateTime": addDate(listText)
-    };
-    arr.push(obj); //set all the objects in one array
+    });
+   // arr.push(obj); //set all the objects in one array
     countIncrease();
+    localStorage.setItem("arr", JSON.stringify(arr));
+
 }
+
+
+
 let task;
-sort.onclick = () => { //a function that will check the priority in each object and than if the priority = to the option(1-5) it will enter to a new array, than takes the new array and put it in the original array after sort
+sort.onclick = () => { 
     let priority1 = [];
     let priority2 = [];
     let priority3 = [];
@@ -50,17 +93,17 @@ sort.onclick = () => { //a function that will check the priority in each object 
             priority5.push(arr[i]);
         }
     }
-    arr = [];
-    let newArr = [priority1, priority2, priority3, priority4, priority5];
-    for (let x= 0; x < newArr.length; x++){
+    arr = []; //order the ToDos in array according to the sort
+    let newArr = [priority5, priority4, priority3, priority2, priority1];
+    for (let x = 0; x < newArr.length; x++){
         let enterBySort = newArr[x];
-        for (let j = 0; j <= priority1.length; j++) {
+        for (let j = 0; j <= enterBySort.length; j++) {
             if (enterBySort[j] !== undefined) {
                 arr.push(enterBySort[j]);
             }
         }
     }
-    viewSection.innerHTML = ""; //delete the current list
+    viewSection.innerHTML = ""; //delete the current list from the screen
     for(let i = 0; i < arr.length; i++) { //add the new list by sort
         listText = document.createElement("div");
         listText.className = "todo-container";
@@ -82,23 +125,31 @@ sort.onclick = () => { //a function that will check the priority in each object 
         timeValue.className = "todo-created-at";
         listText.append(timeValue);
     }
-    
+    localStorage.setItem("arr", JSON.stringify(arr));
+
 }
 
 deleteAll.onclick= () => {
     arr = [];
     viewSection.innerHTML = "";
+    countTask = 0;
+    counter.textContent = countTask;
+    localStorage.clear();
 }
-
-localStorage.setItem("view-section", "arr");
 
 function addSelect(listText) {
     let checkBox = document.createElement("input");
     checkBox.type = "checkBox";
     checkBox.className = "check";
+    checkBox.onclick = function () {
+        if (listText.className === "todo-container") {
+            listText.className = "finish";
+        } else {
+            listText.className === "todo-container";
+        }
+    }
     return listText.append(checkBox);
 }
-let arrayNew = [];
 //delete task
 function deleteTask(listText) {
     let deleteButton = document.createElement("button");
@@ -112,10 +163,14 @@ function deleteTask(listText) {
         for (let i = 0; i < count; i++) { //delete the ToDo from the main array (arr)
             if (listText.querySelector(".todo-created-at").innerText === arr[i]["dateTime"]) {
                 arr.splice(i, 1);
-            }
+                
+                localStorage.setItem("arr", JSON.stringify(arr));
+
+            } 
+            
         }
     };
-    return listText.append(deleteButton), false;
+    return listText.append(deleteButton);
 }
 
 //add priority
