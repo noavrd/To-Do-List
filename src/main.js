@@ -8,10 +8,14 @@ let sort = document.getElementById("sort-button");
 let sortOpposite = document.getElementById("sort-button-opposite");
 let deleteAll = document.getElementById("delete-all");
 let listText = document.createElement("div");
+let darkMode = document.getElementById("dark-button");
 let obj = {};
 let arr = [];
 let task;
 
+darkMode.onclick = () => {
+    document.body.classList.toggle("dark");
+}
 document.addEventListener("DOMContentLoaded", putOnScreenLocalStorage);
 function putOnScreenLocalStorage() {
     if (localStorage.getItem("arr") === null) {
@@ -149,7 +153,7 @@ function addSelect(listText) {
         if (listText.className === "todo-container") {
             listText.className = "finish";
         } else {
-            listText.className === "todo-container";
+            listText.className = "todo-container";
         }
     }
     return listText.append(checkBox);
@@ -167,11 +171,8 @@ function deleteTask(listText) {
         for (let i = 0; i < count; i++) { //delete the ToDo from the main array (arr)
             if (listText.querySelector(".todo-created-at").innerText === arr[i]["dateTime"]) {
                 arr.splice(i, 1);
-                
                 localStorage.setItem("arr", JSON.stringify(arr));
-
             } 
-            
         }
     };
     return listText.append(deleteButton);
