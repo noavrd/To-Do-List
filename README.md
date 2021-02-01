@@ -26,4 +26,4 @@ You can add/remove your task for the day, the week, or whatever you want!
 https://noavrd.github.io/pre-course-2021-final-boilerplate/src/
 
 
-![](src\giphy.gif)
+![](https://media.giphy.com/media/QZ1o5aNtr0qu0XY9bf/giphy.gif)
