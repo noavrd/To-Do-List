@@ -5,51 +5,34 @@ let button = document.getElementById("add-button");
 let counter = document.getElementById("counter");
 let countTask = 0;
 let sort = document.getElementById("sort-button");
+let sortOpposite = document.getElementById("sort-button-opposite");
 let deleteAll = document.getElementById("delete-all");
 let listText = document.createElement("div");
 let obj = {};
 let arr = [];
+let task;
 
 document.addEventListener("DOMContentLoaded", putOnScreenLocalStorage);
 function putOnScreenLocalStorage() {
     if (localStorage.getItem("arr") === null) {
-        arr = [];
+        arr = []; //check if the local storage id empty
     } else {
         arr = JSON.parse(localStorage.getItem("arr"));
     }
     for (let i = 0; i < arr.length; i++) {
-        listText = document.createElement("div");
-        listText.className = "todo-container";
-        viewSection.append(listText);
-        addSelect(listText);
-        deleteTask(listText);
-        let selectValue = document.createElement("div");
-        selectValue.innerText = arr[i]["priority"];
-        selectValue.className = "todo-priority";
-        listText.append(selectValue);
-        let inputValue = document.createElement("div");
-        inputValue.innerText = arr[i]["value"];
-        inputValue.className = "todo-text";
-        listText.append(inputValue);
-        inputValue.innerText;
-        let timeValue = document.createElement("div");
-        timeValue.className = "todo-created-at";
-        timeValue.innerText =arr[i]["dateTime"];
-        listText.append(timeValue);
+        showArrayOnScreen(i);
         countTask++;
     }
     counter.textContent = countTask;
-
 }
 
-
-button.onclick = () => {
+button.onclick = () => { //add a ToDo
     if (localStorage.getItem("arr") === null) {
         arr = [];
     } else {
         arr = JSON.parse(localStorage.getItem("arr"));
     }
-    if (input.value === "") { //check that the input is not empty
+    if (input.value === "") { //checks that the input is not empty
         alert("Add a task");
         return;
     }
@@ -66,33 +49,28 @@ button.onclick = () => {
    // arr.push(obj); //set all the objects in one array
     countIncrease();
     localStorage.setItem("arr", JSON.stringify(arr));
-
 }
-
-
-
-let task;
-sort.onclick = () => { 
-    let priority1 = [];
-    let priority2 = [];
-    let priority3 = [];
-    let priority4 = [];
-    let priority5 = [];
-    
-    for (let i = 0; i < arr.length; i++) {
-         task = arr[i].priority;
-         if(task === "1") {
-             priority1.push(arr[i]);
-        } else if (task === "2") {
-             priority2.push(arr[i]);
-        } else if (task === "3") {
-            priority3.push(arr[i]);
-        } else if (task === "4") {
-            priority4.push(arr[i]);
-        } else {
-            priority5.push(arr[i]);
+sortOpposite.onclick = () => {
+    let { priority1, priority2, priority3, priority4, priority5 } = addArrayToSort();
+    arr = []; //order the ToDos in array according to the sort
+    let newArr = [priority1, priority2, priority3, priority4, priority5];
+    for (let x = 0; x < newArr.length; x++){
+        let enterBySort = newArr[x];
+        for (let j = 0; j <= enterBySort.length; j++) {
+            if (enterBySort[j] !== undefined) {
+                arr.push(enterBySort[j]);
+            }
         }
     }
+    viewSection.innerHTML = ""; //delete the current list from the screen
+    for(let i = 0; i < arr.length; i++) { //show the new list by sort to the screen
+        showArrayOnScreen(i);
+
+    }
+    localStorage.setItem("arr", JSON.stringify(arr));
+}
+sort.onclick = () => { 
+    let { priority1, priority2, priority3, priority4, priority5 } = addArrayToSort();
     arr = []; //order the ToDos in array according to the sort
     let newArr = [priority5, priority4, priority3, priority2, priority1];
     for (let x = 0; x < newArr.length; x++){
@@ -104,29 +82,10 @@ sort.onclick = () => {
         }
     }
     viewSection.innerHTML = ""; //delete the current list from the screen
-    for(let i = 0; i < arr.length; i++) { //add the new list by sort
-        listText = document.createElement("div");
-        listText.className = "todo-container";
-        viewSection.append(listText);
-        addSelect(listText);
-        deleteTask(listText);
-        let selectValue = document.createElement("div");
-        selectValue.textContent = arr[i].priority;
-        selectValue.className = "todo-priority";
-        listText.append(selectValue);
-
-        let inputValue = document.createElement("div");
-        inputValue.textContent = arr[i].value;
-        inputValue.className = "todo-text";
-        listText.append(inputValue);
-
-        let timeValue = document.createElement("div");
-        timeValue.textContent = arr[i].dateTime;
-        timeValue.className = "todo-created-at";
-        listText.append(timeValue);
+    for(let i = 0; i < arr.length; i++) { //show the new list by sort to the screen
+        showArrayOnScreen(i);
     }
     localStorage.setItem("arr", JSON.stringify(arr));
-
 }
 
 deleteAll.onclick= () => {
@@ -135,6 +94,51 @@ deleteAll.onclick= () => {
     countTask = 0;
     counter.textContent = countTask;
     localStorage.clear();
+}
+
+function addArrayToSort() {
+    let priority1 = [];
+    let priority2 = [];
+    let priority3 = [];
+    let priority4 = [];
+    let priority5 = [];
+
+    for (let i = 0; i < arr.length; i++) {
+        task = arr[i].priority;
+        if (task === "1") {
+            priority1.push(arr[i]);
+        } else if (task === "2") {
+            priority2.push(arr[i]);
+        } else if (task === "3") {
+            priority3.push(arr[i]);
+        } else if (task === "4") {
+            priority4.push(arr[i]);
+        } else {
+            priority5.push(arr[i]);
+        }
+    }
+    return { priority1, priority2, priority3, priority4, priority5 };
+}
+
+function showArrayOnScreen(i) {
+    listText = document.createElement("div");
+    listText.className = "todo-container";
+    viewSection.append(listText);
+    addSelect(listText);
+    deleteTask(listText);
+    let selectValue = document.createElement("div");
+    selectValue.innerText = arr[i]["priority"];
+    selectValue.className = "todo-priority";
+    listText.append(selectValue);
+    let inputValue = document.createElement("div");
+    inputValue.innerText = arr[i]["value"];
+    inputValue.className = "todo-text";
+    listText.append(inputValue);
+    inputValue.innerText;
+    let timeValue = document.createElement("div");
+    timeValue.className = "todo-created-at";
+    timeValue.innerText = arr[i]["dateTime"];
+    listText.append(timeValue);
 }
 
 function addSelect(listText) {
