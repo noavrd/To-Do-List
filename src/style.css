@@ -91,6 +91,7 @@ button {
 }
 .todo-text {
     width: 25%;
+    word-break: break-all;
 }
 .dark {
     background: linear-gradient(90deg, rgba(11,9,45,1) 11%, rgba(33,26,180,1) 50%, rgba(3,14,41,1) 91%);
