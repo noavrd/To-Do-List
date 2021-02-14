@@ -15,6 +15,11 @@ let task;
 
 darkMode.onclick = () => {
     document.body.classList.toggle("dark");
+    if (darkMode.innerText === "Dark-mode") {
+        darkMode.innerText = "Light-mode";
+    } else {
+        darkMode.innerText = "Dark-mode";
+    }
 }
 document.addEventListener("DOMContentLoaded", putOnScreenLocalStorage);
 function putOnScreenLocalStorage() {
