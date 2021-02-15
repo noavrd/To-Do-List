@@ -12,6 +12,7 @@ let darkMode = document.getElementById("dark-button");
 let obj = {};
 let arr = [];
 let task;
+const API_KEY = "$2b$10$JUZQ6vUBE/EQkgO8neyE7e8qTPGZfMNabGnA.RYzGcu7Wnz22r1R6";
 
 darkMode.onclick = () => {
     document.body.classList.toggle("dark");
@@ -21,30 +22,23 @@ darkMode.onclick = () => {
         darkMode.innerText = "Dark-mode";
     }
 }
-document.addEventListener("DOMContentLoaded", putOnScreenLocalStorage);
-function putOnScreenLocalStorage() {
-    if (localStorage.getItem("arr") === null) {
-        arr = []; //check if the local storage id empty
-    } else {
-        arr = JSON.parse(localStorage.getItem("arr"));
-    }
+
+document.addEventListener("DOMContentLoaded", putOnScreenJsonBin);
+async function putOnScreenJsonBin() {
+    try {
+    arr = await getPersistent(API_KEY);
     for (let i = 0; i < arr.length; i++) {
         showArrayOnScreen(i);
         countTask++;
     }
     counter.textContent = countTask;
 }
+catch(err) {
+    alert("error " + err.message);
+}
+} 
 
 button.onclick = () => { //add a ToDo
-    if (localStorage.getItem("arr") === null) {
-        arr = [];
-    } else {
-        arr = JSON.parse(localStorage.getItem("arr"));
-    }
-    if (input.value === "") { //checks that the input is not empty
-        alert("Add a task");
-        return;
-    }
     listText = document.createElement("div");
     listText.className = "todo-container";
     viewSection.append(listText);
@@ -55,9 +49,8 @@ button.onclick = () => { //add a ToDo
         "value": addValue(listText),
         "dateTime": addDate(listText)
     });
-   // arr.push(obj); //set all the objects in one array
     countIncrease();
-    localStorage.setItem("arr", JSON.stringify(arr));
+    setPersistent(API_KEY, arr);
 }
 sortOpposite.onclick = () => {
     let { priority1, priority2, priority3, priority4, priority5 } = addArrayToSort();
@@ -74,9 +67,8 @@ sortOpposite.onclick = () => {
     viewSection.innerHTML = ""; //delete the current list from the screen
     for(let i = 0; i < arr.length; i++) { //show the new list by sort to the screen
         showArrayOnScreen(i);
-
     }
-    localStorage.setItem("arr", JSON.stringify(arr));
+    setPersistent(API_KEY, arr);
 }
 sort.onclick = () => { 
     let { priority1, priority2, priority3, priority4, priority5 } = addArrayToSort();
@@ -94,15 +86,14 @@ sort.onclick = () => {
     for(let i = 0; i < arr.length; i++) { //show the new list by sort to the screen
         showArrayOnScreen(i);
     }
-    localStorage.setItem("arr", JSON.stringify(arr));
+    setPersistent(API_KEY, arr);
 }
-
 deleteAll.onclick= () => {
     arr = [];
     viewSection.innerHTML = "";
     countTask = 0;
     counter.textContent = countTask;
-    localStorage.clear();
+    setPersistent(API_KEY, arr);
 }
 
 function addArrayToSort() {
@@ -176,8 +167,9 @@ function deleteTask(listText) {
         for (let i = 0; i < count; i++) { //delete the ToDo from the main array (arr)
             if (listText.querySelector(".todo-created-at").innerText === arr[i]["dateTime"]) {
                 arr.splice(i, 1);
-                localStorage.setItem("arr", JSON.stringify(arr));
-            } 
+                setPersistent(API_KEY, arr);
+                break;
+            }
         }
     };
     return listText.append(deleteButton);
