@@ -13,6 +13,8 @@ let obj = {};
 let arr = [];
 let task;
 const API_KEY = "$2b$10$JUZQ6vUBE/EQkgO8neyE7e8qTPGZfMNabGnA.RYzGcu7Wnz22r1R6";
+const loader = document.getElementById("spinner");
+const textLoad = document.getElementById("load");
 
 darkMode.onclick = () => {
     document.body.classList.toggle("dark");
@@ -32,6 +34,9 @@ function putOnScreenJsonBin() {
 }} 
 
 button.onclick = () => { //add a ToDo
+    if (input.value === ""){
+        alert("Add a task")
+    } else {
     listText = document.createElement("div");
     listText.className = "todo-container";
     viewSection.append(listText);
@@ -44,7 +49,7 @@ button.onclick = () => { //add a ToDo
     });
     countIncrease();
     setPersistent(API_KEY, arr);
-}
+}}
 sortOpposite.onclick = () => {
     let { priority1, priority2, priority3, priority4, priority5 } = addArrayToSort();
     arr = []; //order the ToDos in array according to the sort
