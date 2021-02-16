@@ -24,19 +24,12 @@ darkMode.onclick = () => {
 }
 
 document.addEventListener("DOMContentLoaded", putOnScreenJsonBin);
-async function putOnScreenJsonBin() {
+function putOnScreenJsonBin() {
     try {
-    arr = await getPersistent(API_KEY);
-    for (let i = 0; i < arr.length; i++) {
-        showArrayOnScreen(i);
-        countTask++;
-    }
-    counter.textContent = countTask;
-}
-catch(err) {
+     getPersistent(API_KEY);
+    } catch(err) {
     alert("error " + err.message);
-}
-} 
+}} 
 
 button.onclick = () => { //add a ToDo
     listText = document.createElement("div");
@@ -66,7 +59,7 @@ sortOpposite.onclick = () => {
     }
     viewSection.innerHTML = ""; //delete the current list from the screen
     for(let i = 0; i < arr.length; i++) { //show the new list by sort to the screen
-        showArrayOnScreen(i);
+        showArrayOnScreen(i, arr);
     }
     setPersistent(API_KEY, arr);
 }
@@ -84,7 +77,7 @@ sort.onclick = () => {
     }
     viewSection.innerHTML = ""; //delete the current list from the screen
     for(let i = 0; i < arr.length; i++) { //show the new list by sort to the screen
-        showArrayOnScreen(i);
+        showArrayOnScreen(i, arr);
     }
     setPersistent(API_KEY, arr);
 }
@@ -120,7 +113,7 @@ function addArrayToSort() {
     return { priority1, priority2, priority3, priority4, priority5 };
 }
 
-function showArrayOnScreen(i) {
+function showArrayOnScreen(i, arr) {
     listText = document.createElement("div");
     listText.className = "todo-container";
     viewSection.append(listText);
