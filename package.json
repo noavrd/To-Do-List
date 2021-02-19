@@ -11,7 +11,7 @@
     "url": "git+https://github.com/listguy/pre-course-2021-final.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "noa shalom",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/listguy/pre-course-2021-final/issues"
@@ -23,5 +23,8 @@
     "nock": "^13.0.6",
     "nock-puppeteer": "^1.0.2",
     "puppeteer": "^4.0.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
   }
 }

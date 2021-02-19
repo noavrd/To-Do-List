@@ -1,6 +1,6 @@
  // Assign this variable to your JSONBIN.io API key if you choose to use it.
  const DB_NAME = "my-todo";
- const url = "https://api.jsonbin.io/v3/b/602a88f2f460fe73a196fc47";
+ const url = "http://localhost:3000/b/task1";
 
  // Gets data from persistent storage by the given key and returns it
  function getPersistent(key) {
@@ -11,10 +11,10 @@
      "Content-Type": "application/json",
      "X-Master-key": key	
     }};
-    fetch(url + "/latest", init)
+    fetch(url, init)
     .then(res => res.json())
     .then(data => {
-      arr = data.record[DB_NAME];
+      arr = data[DB_NAME];
       for (let i in arr) {
         showArrayOnScreen(i, arr);
         countTask++;
