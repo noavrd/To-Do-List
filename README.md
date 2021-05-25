@@ -23,7 +23,7 @@ You can add/remove your task for the day, the week, or whatever you want!
 - https://www.youtube.com/watch?v=k8yJCeuP6I8&feature=youtu.be
 
 ## My GitHub page
-https://noavrd.github.io/pre-course-2021-final-boilerplate/src/
+https://noavrd.github.io/To-Do-List/src/
 
 
 ![](https://media.giphy.com/media/QZ1o5aNtr0qu0XY9bf/giphy.gif)
